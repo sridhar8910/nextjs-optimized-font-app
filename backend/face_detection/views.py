@@ -4,9 +4,12 @@ import face_recognition
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 import base64
 from datetime import datetime
 
+@method_decorator(csrf_exempt, name='dispatch')
 class FaceDetectionView(APIView):
     def __init__(self):
         self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -70,6 +73,7 @@ class FaceDetectionView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ReferenceImageView(APIView):
     def post(self, request):
         try:
